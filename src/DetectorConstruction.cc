@@ -3,6 +3,7 @@
 #include "DetectorConstruction.hh"
 
 #include "G4Material.hh"
+//#include "G4Isotope.hh"
 #include "G4NistManager.hh"
 
 #include "G4Box.hh"
@@ -80,15 +81,15 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 	// GdLS /////////////
 	// Mother = World
-	G4Box*GdLSSolid   = new G4Box("GdLS", GdLSSizeX / 2.0, GdLSSizeY / 2.0, GdLSSizeZ / 2.0);
+	/*G4Box*GdLSSolid   = new G4Box("GdLS", GdLSSizeX / 2.0, GdLSSizeY / 2.0, GdLSSizeZ / 2.0);
 	G4LogicalVolume*   GdLSLogical = new G4LogicalVolume(GdLSSolid, fGdLSMaterial, "GdLS");
 	G4double GdLSPositionZ = 0*cm;
 	new G4PVPlacement(0, G4ThreeVector(0,0,GdLSPositionZ), GdLSLogical, "GdLS", worldLogical, false, copyNoGdLS);
 	G4VisAttributes* GdLSVisAtt = new G4VisAttributes(red);
 	GdLSVisAtt  -> SetVisibility(visFlagGdLS);
-	GdLSLogical -> SetVisAttributes(GdLSVisAtt);
+	GdLSLogical -> SetVisAttributes(GdLSVisAtt);*/
 
-  // LiLS /////////////
+	// LiLS /////////////
 	// Mother = World
 	G4Box*LiLSSolid   = new G4Box("LiLS", GdLSSizeX / 2.0, GdLSSizeY / 2.0, GdLSSizeZ / 2.0);
 	G4LogicalVolume*   LiLSLogical = new G4LogicalVolume(LiLSSolid, fLiLSMaterial, "LiLS");
@@ -108,7 +109,7 @@ void DetectorConstruction::DefineMaterials()
 	// http://geant4.web.cern.ch/geant4/G4UsersDocuments/UsersGuides/ForApplicationDeveloper/html/Detector/materialNames.html
 	G4NistManager* nistManager = G4NistManager::Instance();
 	nistManager -> FindOrBuildMaterial("G4_AIR");
-	nistManager -> FindOrBuildMaterial("G4_WATER");
+	G4Material* H2O = nistManager -> FindOrBuildMaterial("G4_WATER");
 
 	//for GdLS
 	//
@@ -120,6 +121,10 @@ void DetectorConstruction::DefineMaterials()
 	G4Element* Gd  = nistManager -> FindOrBuildElement("Gd");
 	G4Element* Li  = nistManager -> FindOrBuildElement("Li");
 	G4Element* Cl  = nistManager -> FindOrBuildElement("Cl");
+	G4Isotope* Li6 = new G4Isotope("Li6",3,6,0.);
+	//G4Isotope https://indico.cern.ch/event/781244/contributions/3251907/attachments/1782383/2900303/Materials.pdf
+	G4Element* EnrLi6 = new G4Element("EnrichedLi6","6Li",1);
+	EnrLi6 -> AddIsotope(Li6, 1);
 
 	G4double fractionmass, density;
 	G4int    ncomponents, natoms;
@@ -167,38 +172,45 @@ void DetectorConstruction::DefineMaterials()
 	GdLS_inside -> AddMaterial(NonGdLS, fractionmass = (100-Gd_fractionmass) *perCent); //
 	GdLS_inside -> AddMaterial(Gd_mat,  fractionmass =      Gd_fractionmass  *perCent); //
 
-  //PNE https://www.env.go.jp/chemi/report/h21-01/pdf/chpt1/1-2-3-10.pdf
+	//PNE https://www.env.go.jp/chemi/report/h21-01/pdf/chpt1/1-2-3-10.pdf
 	//PNE-9 : C_15+2n H_24+4n O_1+n n=9
 	//PNE-15 : density = 1.07g/ml
 	//density https://labchem-wako.fujifilm.com/sds/W01W0116-2169JGHEJP.pdf
 	density = 1.06 *g/cm3;
 	G4Material* PNE_9 = new G4Material("PNE_9", density, ncomponents = 3);
-	PPO -> AddElement(H, natoms = 60);
-	PPO -> AddElement(C, natoms = 33);
-	PPO -> AddElement(O, natoms = 10);
+	PNE_9 -> AddElement(H, natoms = 60);
+	PNE_9 -> AddElement(C, natoms = 33);
+	PNE_9 -> AddElement(O, natoms = 10);
 
 	density = 2.07 *g/cm3;
 	G4Material* LiCl = new G4Material("LiCl", density, ncomponents = 2);
-	PPO -> AddElement(Li, natoms = 1);
-	PPO -> AddElement(Cl, natoms = 1);
+	LiCl -> AddElement(Li, natoms = 1);
+	LiCl -> AddElement(Cl, natoms = 1);
+
+	density = 2.07 *g/cm3;
+	G4Material* Li6Cl = new G4Material("Li6Cl", density, ncomponents = 2);
+	//Li6Cl -> AddIsotope(Li6, natoms = 1);
+	Li6Cl -> AddElement(EnrLi6, natoms = 1);
+	Li6Cl -> AddElement(Cl, natoms = 1);
 
 	density = 1.09 *g/cm3;
 	G4Material* LiSolution = new G4Material("LiH2O", density, ncomponents = 2);
-	LiSolution -> AddMaterial(LiCl, fractionmass = 10.366 *perCent); //
-	LiSolution -> AddMaterial(G4_WATER,  fractionmass =      50.093  *perCent); //
+	//LiSolution -> AddMaterial(LiCl, fractionmass = 17.15 *perCent); //10.366
+	LiSolution -> AddMaterial(Li6Cl, fractionmass = 17.15 *perCent); //10.366
+	LiSolution -> AddMaterial(H2O,  fractionmass = 82.85  *perCent); //50.093
 
 	density = 0.852 *g/cm3;
 	G4Material* Bis_master = new G4Material("BisMas", density, ncomponents = 2);
-	LiSolution -> AddMaterial(BisMSB, fractionmass = 0.10 *perCent); //
-	LiSolution -> AddMaterial(LAB,  fractionmass =   200  *perCent); //
+	Bis_master -> AddMaterial(BisMSB, fractionmass =  0.05 *perCent); //0.10
+	Bis_master -> AddMaterial(LAB,  fractionmass =   99.95  *perCent); //200
 
 	density = 0.889 *g/cm3;
 	G4Material* LiLS = new G4Material("LiLS", density, ncomponents = 5);
-	LiLS -> AddMaterial(LAB,  fractionmass =   80.0  *perCent); //
-	LiLS -> AddMaterial(PPO,     fractionmass =  0.348   *perCent); // 3.0 g/l
-	LiLS -> AddMaterial(Bis_master, fractionmass = 7.0 *perCent); //
-	LiLS -> AddMaterial(PNE_9,  fractionmass =    17.0 *perCent); //
-	LiLS -> AddMaterial(LiSolution,  fractionmass =   2.86  *perCent); //
+	LiLS -> AddMaterial(LAB,  fractionmass =   74.62  *perCent); // 80
+	LiLS -> AddMaterial(PPO,     fractionmass =  0.32   *perCent); // 0.348
+	LiLS -> AddMaterial(Bis_master, fractionmass = 6.53 *perCent); // 7.0
+	LiLS -> AddMaterial(PNE_9,  fractionmass =    15.86 *perCent); // 17.0
+	LiLS -> AddMaterial(LiSolution,  fractionmass =   2.67  *perCent); // 2.86
 
 	// Print materials
 	G4cout << G4endl << "The materials defined are : " << G4endl << G4endl;

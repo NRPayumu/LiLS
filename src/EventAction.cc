@@ -18,14 +18,14 @@
 
 EventAction::EventAction(RunAction* run, PrimaryGeneratorAction* primary)
 : fEnergyIn(0.),
-/*fPositionInX(0.),
+fPositionInX(0.),
 fPositionInY(0.),
 fPositionInZ(0.),
 fCaptureID(0),
 fPositionCapX(0.),
 fPositionCapY(0.),
 fPositionCapZ(0.),
-fTimeCap(0.),*/
+fTimeCap(0.),
 fEnergyAbs(0.),
 fEnergyLos(0.),
 fLengthGravit(0.),
@@ -48,14 +48,14 @@ EventAction::~EventAction()
 void EventAction::BeginOfEventAction(const G4Event* evt)
 {
 	fEnergyIn    = 0.,
-	/*fPositionInX = 0.,
+	fPositionInX = 0.,
 	fPositionInY = 0.,
 	fPositionInZ = 0.,
 	fCaptureID   = 0 ,
 	fPositionCapX= 0.,
 	fPositionCapY= 0.,
 	fPositionCapZ= 0.,
-	fTimeCap     = 0.,*/
+	fTimeCap     = 0.,
 	fEnergyAbs   = 0.,
 	fEnergyLos   = 0.,
 	fLengthGravit= 0.,
@@ -122,7 +122,7 @@ void EventAction::EndOfEventAction(const G4Event* evt)
 	}
 	auto analysisManager = G4AnalysisManager::Instance();
 	analysisManager->FillNtupleDColumn(0, fEnergyIn);
-  /*analysisManager->FillNtupleDColumn(1, fPositionInX);
+  analysisManager->FillNtupleDColumn(1, fPositionInX);
   analysisManager->FillNtupleDColumn(2, fPositionInY);
   analysisManager->FillNtupleDColumn(3, fPositionInZ);
 	analysisManager->FillNtupleDColumn(4, fCaptureID);
@@ -135,8 +135,12 @@ void EventAction::EndOfEventAction(const G4Event* evt)
   analysisManager->FillNtupleDColumn(11, fLengthGravit);
   analysisManager->FillNtupleDColumn(12, fGravitX);
   analysisManager->FillNtupleDColumn(13, fGravitY);
-  analysisManager->FillNtupleDColumn(14, fGravitZ);*/
-  analysisManager->FillNtupleDColumn(1, fEnergyAbs);
+  analysisManager->FillNtupleDColumn(14, fGravitZ);
+  analysisManager->FillNtupleDColumn(15, fChargedAbs);
+  analysisManager->FillNtupleDColumn(16, fChargedGravitX);
+  analysisManager->FillNtupleDColumn(17, fChargedGravitY);
+  analysisManager->FillNtupleDColumn(18,fChargedGravitZ);
+  /*analysisManager->FillNtupleDColumn(1, fEnergyAbs);
   analysisManager->FillNtupleDColumn(2, fEnergyLos);
   analysisManager->FillNtupleDColumn(3, fLengthGravit);
   analysisManager->FillNtupleDColumn(4, fGravitX);
@@ -145,7 +149,7 @@ void EventAction::EndOfEventAction(const G4Event* evt)
   analysisManager->FillNtupleDColumn(7, fChargedAbs);
   analysisManager->FillNtupleDColumn(8, fChargedGravitX);
   analysisManager->FillNtupleDColumn(9, fChargedGravitY);
-  analysisManager->FillNtupleDColumn(10,fChargedGravitZ);
+  analysisManager->FillNtupleDColumn(10,fChargedGravitZ);*/
   analysisManager->AddNtupleRow();
 }
 

@@ -92,9 +92,9 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 		fEventAction->SetEne(OriEn,PrePX,PrePY,PrePZ);
 		//fEventAction->AddEne(OriEn);
 	}
-	/*if(preProcessName=="nCapture" && CopyN == 301){
-		fEventAction->RecCap(ParID,PrePX,PrePY,PrePZ);
-	}*/
+	if(postProcessName=="nCapture" && CopyN == 401){
+		fEventAction->RecCap(ParID,PosPX,PosPY,PosPZ,GTime);
+	}
 	/*if(TraID==1 && CopyN == 301 && (postProcessName=="annihil" || postProcessName=="nCapture")){
 		fEventAction->RecCap(ParID,PosPX,PosPY,PosPZ,GTime);
 		//fEventAction->AddEne(OriEn);
@@ -103,13 +103,16 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 		//fEventAction->AddEne(-1*CurEn));
 		fEventAction->AddLos(CurEn);
 	}*/
-	if(postProcessName=="Transportation" && CopyN == 301){
+	if(postProcessName=="Transportation" && CopyN == 401){
 		//fEventAction->AddEne(-1*CurEn));
 		fEventAction->AddLos(CurEn);
 	}
-	if(CopyN == 301){
-		fEventAction->AddEne(StDep,PosPX,PosPY,PosPZ);
-		if( particleName == "e-" || particleName == "e+" || particleName == "proton" || particleName == "mu-" || particleName == "mu+" ){
+	if(CopyN == 401){
+		if( particleName != "proton" ){
+			fEventAction->AddEne(StDep,PosPX,PosPY,PosPZ);
+		}
+		//if( particleName == "e-" || particleName == "e+" || particleName == "proton" || particleName == "mu-" || particleName == "mu+" ){
+		if( particleName == "proton" ){
 			fEventAction->AddChE(StDep,PosPX,PosPY,PosPZ);
 		}
 	}

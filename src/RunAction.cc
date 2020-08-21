@@ -55,6 +55,7 @@ RunAction::RunAction()
   analysisManager->FinishNtuple();
   /*
   analysisManager->CreateNtupleSColumn("Detector_Name");
+  analysisManager->CreateNtupleSColumn("Detector_Name");
   analysisManager->CreateNtupleDColumn("year");
   analysisManager->CreateNtupleDColumn("date");
   analysisManager->CreateNtupleDColumn("World_Size");
@@ -74,14 +75,14 @@ RunAction::RunAction(G4String RootFileName)
   analysisManager->SetNtupleMerging(true);
   analysisManager->CreateNtuple("Tree", "Tree");
   analysisManager->CreateNtupleDColumn("SEne");
-  /*analysisManager->CreateNtupleDColumn("SposX");
+  analysisManager->CreateNtupleDColumn("SposX");
   analysisManager->CreateNtupleDColumn("SposY");
   analysisManager->CreateNtupleDColumn("SposZ");
   analysisManager->CreateNtupleDColumn("CapID");
   analysisManager->CreateNtupleDColumn("CposX");
   analysisManager->CreateNtupleDColumn("CposY");
   analysisManager->CreateNtupleDColumn("CposZ");
-  analysisManager->CreateNtupleDColumn("CTime");*/
+  analysisManager->CreateNtupleDColumn("CTime");
   analysisManager->CreateNtupleDColumn("Eabs");
   analysisManager->CreateNtupleDColumn("Elos");
   analysisManager->CreateNtupleDColumn("LenG");

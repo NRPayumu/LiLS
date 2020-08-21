@@ -3,9 +3,9 @@
 
 const G4String Detector_symbolic_Name = "Gd-LS";
 
-const G4String Particle_Name = "gamma";
+//const G4String Particle_Name = "gamma";
 //const G4String Particle_Name = "neutron";
-//const G4String Particle_Name = "e+";
+const G4String Particle_Name = "e+";
 //const G4String Particle_Name = "fast_neutron";
 
 const G4double Gd_fractionmass = 0.5;
@@ -24,16 +24,16 @@ const G4double GdLS_density = 0.857 *g/cm3;  //0.5w%
 
 //const G4double worldBoxSizeXY    = 20.0 *cm; // *cm
 //const G4double worldBoxSizeZ     = 20.0 *cm;
-const G4double worldBoxSizeXY    =100.0 *cm; // *cm
-const G4double worldBoxSizeZ     =100.0 *cm;
+const G4double worldBoxSizeXY    =20.0 *cm; // *cm
+const G4double worldBoxSizeZ     =20.0 *cm;
 
 // GdLS
 //const G4double GdLSSizeX           = 20.0 *cm; // *cm  //Primary and DetConst
 //const G4double GdLSSizeY           = 20.0 *cm; //8L
 //const G4double GdLSSizeZ           = 20.0 *cm; //1.0 *mm;
-const G4double GdLSSizeX           =100.0 *cm; // *cm  //Primary and DetConst
-const G4double GdLSSizeY           =100.0 *cm; //8L
-const G4double GdLSSizeZ           =100.0 *cm; //1.0 *mm;
+const G4double GdLSSizeX           =20.0 *cm; // *cm  //Primary and DetConst
+const G4double GdLSSizeY           =20.0 *cm; //8L
+const G4double GdLSSizeZ           =20.0 *cm; //1.0 *mm;
 
 // World
 //const G4double worldBoxSizeXY    = 10.0 *m;
